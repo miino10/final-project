@@ -1,6 +1,7 @@
 import {
    
     Customer,
+    CustomerPrepaymentTable,
     Product,
     TinvoiceSchemaTables,
     TreceiptSchemaTables,
@@ -239,4 +240,28 @@ import { Accounts } from "../../chart-of-accounts/page";
     defaultSorting: [{ id: "id", desc: false }],
     filterableColumns: ["id"],
     searchableColumns: ["id", "createdBy"],
+  };
+
+
+  export const customerPrepaymentsTableConfig: TableConfig<CustomerPrepaymentTable> =
+  {
+    columns: [
+      selectColumn as ColumnDef<CustomerPrepaymentTable>,
+      { accessorKey: "customerPrepaymentNo", header: "Prepayment No" },
+      {
+        accessorKey: "customer.name",
+        header: "Customer Name",
+        enableSorting: true,
+      },
+      { accessorKey: "paymentDate", header: "Payment Date" },
+      { accessorKey: "paymentMethod", header: "Payment Method" },
+      { accessorKey: "paymentAccount.name", header: "Payment Account" },
+      { accessorKey: "amount", header: "Amount" },
+      { accessorKey: "remainingBalance", header: "Remaining Balance" },
+      { accessorKey: "status", header: "Status" },
+      { accessorKey: "memo", header: "Memo" },
+    ],
+    defaultSorting: [{ id: "customerPrepaymentNo", desc: false }],
+    filterableColumns: ["status", "paymentMethod"],
+    searchableColumns: ["customerPrepaymentNo", "status"],
   };
