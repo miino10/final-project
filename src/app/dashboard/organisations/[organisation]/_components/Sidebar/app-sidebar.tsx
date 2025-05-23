@@ -103,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       items: [
         {
           title: "Journals",
-          url: `/dashboard/organisations/${orgId}/manual-journal`,
+          url: `/dashboard/organisations/${orgId}/general-journal`,
         },
         {
           title: "Chart of Accounts",
