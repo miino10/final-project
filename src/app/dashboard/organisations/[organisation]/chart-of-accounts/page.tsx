@@ -42,8 +42,6 @@ export default function ChartOfAccountsPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const AccountsTable = createTable(accountsTableConfig);
-  const { data: accountCategories } = useAccountCategory();
-  const { mutate } = useAccountCreation();
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<"true" | "false">("true");
 
@@ -59,7 +57,7 @@ export default function ChartOfAccountsPage() {
     queryFn: () =>
       axios
         .get<ApiResponse>(
-          `/api/accounts?page=${page}&pageSize=${pageSize}&isActive=${filter}`
+          `/api/chart-of-accounts?page=${page}&pageSize=${pageSize}&isActive=${filter}`
         )
         .then((res) => res.data),
   });
