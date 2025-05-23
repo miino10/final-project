@@ -386,139 +386,6 @@ export const VendorcreditActions = ({ row }: { row: any }) => {
   );
 };
 
-export const AccountActions = ({ row }: { row: any }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const accountsStatusChange = useAccountsStatusChange();
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
-
-  const isSystemAccount =
-    row.accountConfigurations && row.accountConfigurations.length > 0;
-
-  const handleStatusChange = useCallback(
-    async (newStatus: boolean) => {
-      if (isSystemAccount) {
-        toast({
-          variant: "destructive",
-          title: "Cannot modify system account",
-          description: "System accounts cannot be activated or deactivated",
-        });
-        return;
-      }
-      accountsStatusChange.mutate({ id: row.id, isActive: newStatus });
-    },
-    [accountsStatusChange, isSystemAccount, row.id]
-  );
-
-  const handleDelete = async (id: number) => {
-    try {
-      const response = await axios.delete(`/api/accounts/${id}`);
-      if (response.data.success) {
-        toast({
-          title: "Success",
-          description: response.data.message,
-        });
-        queryClient.invalidateQueries({ queryKey: ["accounts"] });
-        setIsDeleteDialogOpen(false);
-      }
-    } catch (error) {
-      let errorMessage = "An unexpected error occurred";
-      if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message || errorMessage;
-      }
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: errorMessage,
-      });
-    }
-  };
-
-  return (
-    <>
-      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {!isSystemAccount && (
-            <>
-              <DropdownMenuItem
-                onClick={() => {
-                  setIsEditDialogOpen(true);
-                  setIsDropdownOpen(false);
-                }}>
-                <PencilLine className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              {row.isActive ? (
-                <DropdownMenuItem
-                  onClick={() => handleStatusChange(false)}
-                  className="text-red-600">
-                  <X className="mr-2 h-4 w-4" />
-                  Deactivate Account
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onClick={() => handleStatusChange(true)}
-                  className="text-green-600">
-                  <Check className="mr-2 h-4 w-4" />
-                  Activate Account
-                </DropdownMenuItem>
-              )}
-
-              <DropdownMenuItem
-                onClick={() => {
-                  setIsDeleteDialogOpen(true), setIsDropdownOpen(false);
-                }}
-                className="text-red-600">
-                <Ban className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <AccountCreationDialog
-        open={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
-        mode="edit"
-        account={row}
-      />
-
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Account</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p>Are you sure you want to delete this account?</p>
-            <p className="text-sm text-muted-foreground mt-2">
-              This action cannot be undone. The account will be permanently
-              deleted.
-            </p>
-          </div>
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={() => handleDelete(row.id)}>
-              Delete
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
 
 export const CustomerActions = ({ row }: { row: any }) => {
   const router = useRouter();
@@ -792,4 +659,140 @@ export const VendorsActions = ({ row }: { row: any }) => {
     </>
   );
 };
+
+
+export const AccountActions = ({ row }: { row: any }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const accountsStatusChange = useAccountsStatusChange();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const isSystemAccount =
+    row.accountConfigurations && row.accountConfigurations.length > 0;
+
+  const handleStatusChange = useCallback(
+    async (newStatus: boolean) => {
+      if (isSystemAccount) {
+        toast({
+          variant: "destructive",
+          title: "Cannot modify system account",
+          description: "System accounts cannot be activated or deactivated",
+        });
+        return;
+      }
+      accountsStatusChange.mutate({ id: row.id, isActive: newStatus });
+    },
+    [accountsStatusChange, isSystemAccount, row.id]
+  );
+
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await axios.delete(`/api/accounts/${id}`);
+      if (response.data.success) {
+        toast({
+          title: "Success",
+          description: response.data.message,
+        });
+        queryClient.invalidateQueries({ queryKey: ["accounts"] });
+        setIsDeleteDialogOpen(false);
+      }
+    } catch (error) {
+      let errorMessage = "An unexpected error occurred";
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || errorMessage;
+      }
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: errorMessage,
+      });
+    }
+  };
+
+  return (
+    <>
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          {!isSystemAccount && (
+            <>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsEditDialogOpen(true);
+                  setIsDropdownOpen(false);
+                }}>
+                <PencilLine className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+              {row.isActive ? (
+                <DropdownMenuItem
+                  onClick={() => handleStatusChange(false)}
+                  className="text-red-600">
+                  <X className="mr-2 h-4 w-4" />
+                  Deactivate Account
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem
+                  onClick={() => handleStatusChange(true)}
+                  className="text-green-600">
+                  <Check className="mr-2 h-4 w-4" />
+                  Activate Account
+                </DropdownMenuItem>
+              )}
+
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsDeleteDialogOpen(true), setIsDropdownOpen(false);
+                }}
+                className="text-red-600">
+                <Ban className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AccountCreationDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        mode="edit"
+        account={row}
+      />
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Account</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p>Are you sure you want to delete this account?</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              This action cannot be undone. The account will be permanently
+              deleted.
+            </p>
+          </div>
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={() => handleDelete(row.id)}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
 
