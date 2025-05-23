@@ -638,9 +638,9 @@ export const invoices = pgTable("invoices", {
   orgsId: text("org_id"),
   total: decimal("total", { precision: 15, scale: 2 }),
   dueBalance: decimal("due_balance", { precision: 15, scale: 2 }),
-  // inventoryId: integer("inventory_id").references(() => inventories.id, {
-  //   onDelete: "cascade",
-  // }),
+  inventoryId: integer("inventory_id").references(() => inventories.id, {
+    onDelete: "cascade",
+  }),
   isVoided: boolean("is_voided").default(false),
   voidedAt: timestamp("voided_at", { withTimezone: true }),
   voidedBy: text("voided_by"),
@@ -785,9 +785,9 @@ export const invoiceItem = pgTable("invoice_Item", {
   productId: integer("product_id").references(() => products.productId, {
     onDelete: "cascade",
   }),
-  // batchId: integer("batch_id").references(() => inventoryBatches.id, {
-  //   onDelete: "cascade",
-  // }),
+  batchId: integer("batch_id").references(() => inventoryBatches.id, {
+    onDelete: "cascade",
+  }),
   product_name: text("product_name"),
   quantity: numeric("quantity"),
   unit_price: decimal("unit_price", { precision: 15, scale: 2 }),
@@ -1522,10 +1522,10 @@ export const invoiceRelations = relations(invoices, ({ one, many }) => ({
     references: [customers.id],
   }),
   items: many(invoiceItem),
-  // inventoryLocation: one(inventories, {
-  //   fields: [invoices.inventoryId],
-  //   references: [inventories.id],
-  // }),
+  inventoryLocation: one(inventories, {
+    fields: [invoices.inventoryId],
+    references: [inventories.id],
+  }),
   payments: many(Payments),
 }));
 
