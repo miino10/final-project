@@ -268,7 +268,7 @@ export const ReceiptActions = ({ row }: { row: any }) => {
 
   const handleReview = async (receiptId: string, e: React.MouseEvent) => {
     // (await deleteReceipt).mutate({ receiptId: receiptId });
-    router.push(`/dashboard/organisation/${orgId}/receipts/${receiptId}`);
+    router.push(`/dashboard/organisations/${orgId}/receipts/${receiptId}`);
   };
 
   const receiptStatusChange = useReceiptStatusChange();
@@ -541,7 +541,7 @@ export const CustomerActions = ({ row }: { row: any }) => {
     (e: Event) => {
       e.preventDefault();
       setIsDropdownOpen(false);
-      router.push(`/dashboard/organisation/${orgId}/customers/${row.id}`);
+      router.push(`/dashboard/organisations/${orgId}/customers/${row.id}`);
     },
     [orgId, row.id, router]
   );
@@ -714,7 +714,7 @@ export const VendorsActions = ({ row }: { row: any }) => {
     (e: Event) => {
       e.preventDefault();
       setIsDropdownOpen(false);
-      router.push(`/dashboard/organisation/${orgId}/vendors/${row.id}`);
+      router.push(`/dashboard/organisations/${orgId}/vendors/${row.id}`);
     },
     [orgId, row.id, router]
   );
